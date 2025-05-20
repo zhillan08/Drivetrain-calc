@@ -1,2 +1,3 @@
-# Drivetrain-calc
-a calculator to calculate power loss from drivetrain
+# h1 heading 
+
+## Horizontal Rules
