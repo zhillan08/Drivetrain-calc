@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Drivetrain Loss Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f8;
+      padding: 30px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 25px 30px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    label {
+      font-weight: 600;
+      margin-top: 15px;
+      display: block;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      background-color: #0078D7;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #005ea6;
+    }
+
+    #result {
+      margin-top: 25px;
+      font-size: 18px;
+      text-align: center;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Drivetrain Loss Calculator</h2>
+
+    <label for="crankHp">Crank Horsepower (BHP):</label>
+    <input type="number" id="crankHp" value="500">
+
+    <label for="transmission">Transmission Type:</label>
+    <select id="transmission">
+      <option value="manual">Manual</option>
+      <option value="auto">Automatic</option>
+      <option value="dct">Dual-Clutch (DCT)</option>
+      <option value="cvt">CVT</option>
+    </select>
+
+    <label for="drivetrain">Drivetrain Layout:</label>
+    <select id="drivetrain">
+      <option value="fwd">FWD</option>
+      <option value="rwd">RWD</option>
+      <option value="awd">AWD / 4WD</option>
+    </select>
+
+    <label for="diff">Differential Type:</label>
+    <select id="diff">
+      <option value="open">Open</option>
+      <option value="lsd">LSD</option>
+      <option value="locking">Locking</option>
+    </select>
+
+    <button onclick="calculateWHP()">Calculate WHP</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function calculateWHP() {
+      const crankHp = parseFloat(document.getElementById("crankHp").value);
+      const transmission = document.getElementById("transmission").value;
+      const drivetrain = document.getElementById("drivetrain").value;
+      const diff = document.getElementById("diff").value;
+
+      let loss = 0;
+
+      // Transmission losses
+      switch (transmission) {
+        case "manual": loss += 0.05; break;
+        case "auto": loss += 0.08; break;
+        case "dct": loss += 0.06; break;
+        case "cvt": loss += 0.12; break;
+      }
+
+      // Drivetrain losses
+      switch (drivetrain) {
+        case "fwd": loss += 0.05; break;
+        case "rwd": loss += 0.07; break;
+        case "awd": loss += 0.08; break;
+      }
+
+      // Differential losses
+      switch (diff) {
+        case "open": loss += 0.03; break;
+        case "lsd": loss += 0.06; break;
+        case "locking": loss += 0.07; break;
+      }
+
+      // Miscellaneous (bearings, tires)
+      loss += 0.02;
+
+      const whp = crankHp * (1 - loss);
+      const lossPercent = Math.round(loss * 100);
+
+      document.getElementById("result").innerHTML =
+        `Estimated Wheel Horsepower: <strong>${whp.toFixed(1)} HP</strong><br>` +
+        `(Drivetrain Loss: ~${lossPercent}%)`;
+    }
+  </script>
+</body>
+</html>
